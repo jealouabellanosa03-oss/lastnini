@@ -89,7 +89,7 @@ self.addEventListener('fetch', function(event) {
 
             .then(function(cachedResponse) {
 
-                // Return cached file
+                // Return cached file if available
                 if (cachedResponse) {
                     return cachedResponse;
                 }
@@ -125,7 +125,7 @@ self.addEventListener('fetch', function(event) {
 
                     .catch(function() {
 
-                        // Offline page fallback
+                        // If navigation fails, return cached index
                         if (request.mode === 'navigate') {
 
                             return caches.match(
@@ -133,6 +133,10 @@ self.addEventListener('fetch', function(event) {
                             );
 
                         }
+
+                        // For other failed requests,
+                        // return a valid Response instead of undefined.
+                        return Response.error();
 
                     });
 
